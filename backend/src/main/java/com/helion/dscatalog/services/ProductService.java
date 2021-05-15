@@ -12,8 +12,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.helion.dscatalog.dto.CategoryDTO;
 import com.helion.dscatalog.dto.ProductDTO;
+import com.helion.dscatalog.entities.Category;
 import com.helion.dscatalog.entities.Product;
+import com.helion.dscatalog.repositories.CategoryRepository;
 import com.helion.dscatalog.repositories.ProductRepository;
 import com.helion.dscatalog.services.exceptions.DataBaseException;
 import com.helion.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -23,6 +26,9 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository repo;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 	
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
@@ -41,16 +47,18 @@ public class ProductService {
 	@Transactional
 	public ProductDTO insert(ProductDTO dto) {
 		Product entity = new Product();
-		//entity.setName(dto.getName());
+		copyDtoToEntity(entity, dto);
 		entity = repo.save(entity);
 		return new ProductDTO(entity);
 	}
+
+	
 
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
 		try {
 			Product entity = repo.getOne(id);
-			//entity.setName(dto.getName());
+			copyDtoToEntity(entity, dto);
 			entity = repo.save(entity);
 			return new ProductDTO(entity);
 		}
@@ -72,6 +80,21 @@ public class ProductService {
 		}
 		
 		
+	}
+	
+	private void copyDtoToEntity(Product entity, ProductDTO dto) {
+		entity.setName(dto.getName());
+		entity.setDate(dto.getDate());
+		entity.setDescription(dto.getDescription());
+		entity.setPrice(dto.getPrice());
+		entity.setImgUrl(dto.getImgUrl());
+		entity.getCategories().clear();
+		
+		for(CategoryDTO catDTO: dto.getCategories()) {
+			Category category = categoryRepository.getOne(catDTO.getId());
+			entity.getCategories().add(category);
+		}
+	
 	}
 	
 	
