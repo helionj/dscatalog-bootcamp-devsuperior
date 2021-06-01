@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 import com.helion.dscatalog.entities.User;
 
 
@@ -13,8 +16,11 @@ public class UserDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	Long id;
+	@NotBlank(message ="Campo obrigatório")
 	String firstName;
 	String lastName;
+	
+	@Email(message="Favor entrar com um e-mail válido")
 	String email;
 	
 	
