@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.helion.dscatalog.dto.RoleDTO;
 import com.helion.dscatalog.dto.UserDTO;
 import com.helion.dscatalog.dto.UserInsertDTO;
+import com.helion.dscatalog.dto.UserUpdateDTO;
 import com.helion.dscatalog.entities.Role;
 import com.helion.dscatalog.entities.User;
 import com.helion.dscatalog.repositories.RoleRepository;
@@ -59,7 +60,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public UserDTO update(Long id, UserDTO dto) {
+	public UserDTO update(Long id, UserUpdateDTO dto) {
 		try {
 			User entity = repository.getOne(id);
 			copyDtoToEntity(entity, dto);
