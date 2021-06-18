@@ -1,5 +1,6 @@
 package com.helion.dscatalog.services;
 
+import static org.mockito.ArgumentMatchers.any;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -71,11 +72,11 @@ public class ProductServiceTests {
 		Mockito.when(repository.getOne(existingId)).thenReturn(product);
 		Mockito.when(categoryRepository.getOne(existingId)).thenReturn(category);
 		
-		Mockito.when(repository.findAll((Pageable) ArgumentMatchers.any())).thenReturn(page);
-		Mockito.when(repository.save(ArgumentMatchers.any())).thenReturn(product);
+		Mockito.when(repository.findAll((Pageable) any())).thenReturn(page);
+		Mockito.when(repository.save(any())).thenReturn(product);
 		Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(product));
 		Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
-		
+		Mockito.when(repository.find(any(), any(), any())).thenReturn(page);
 		
 		Mockito.doNothing().when(repository).deleteById(existingId);
 		Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
@@ -124,9 +125,9 @@ public class ProductServiceTests {
 	public void findAllPagedShouldReturnPage() {
 		
 		Pageable pageable = PageRequest.of(0, 5);
-		Page<ProductDTO> page = service.findAllPaged(pageable);
+		Page<ProductDTO> page = service.findAllPaged(0L,"", pageable);
 		Assertions.assertNotNull(page);
-		Mockito.verify(repository).findAll(pageable);
+		
 	}
 	
 	
