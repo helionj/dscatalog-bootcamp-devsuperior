@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import qs from 'qs';
+import history from './history';
 
 export const BASE_URL =
   process.env.REACT_APP_BASE_URL ?? 'http://localhost:8080';
@@ -62,3 +63,24 @@ export const getAuthData = () => {
   const str = localStorage.getItem('authData') ?? '{}';
   return JSON.parse(str) as LoginResponse;
 };
+
+
+axios.interceptors.request.use(function (config) {
+    //
+    return config;
+  }, function (error) {
+    //
+    return Promise.reject(error);
+  });
+
+// Add a response interceptor
+axios.interceptors.response.use(function (response) {
+    //
+    return response;
+  }, function (error) {
+    if(error.response.status === 401 || error.response.status === 403) {
+        history.push('/admin/auth');
+    }
+    return Promise.reject(error);
+  });
+
