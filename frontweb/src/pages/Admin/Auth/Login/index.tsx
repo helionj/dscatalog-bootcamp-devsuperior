@@ -2,8 +2,14 @@ import { Link, useHistory } from 'react-router-dom';
 import ButtonIcon from '../../../../components/ButtonIcon';
 import { useForm } from 'react-hook-form';
 import './styles.css';
-import { requestBackendLogin, saveAuthData } from '../../../../util/requests';
+import {
+  getTokenData,
+  requestBackendLogin,
+  saveAuthData,
+} from '../../../../util/requests';
 import { useState } from 'react';
+import { AuthContext } from '../../../../AuthContext';
+import { useContext } from 'react';
 
 type FormData = {
   username: string;
@@ -19,18 +25,22 @@ const Login = () => {
 
   const [hasError, setHasError] = useState(false);
 
+  const { setAuthContextData } = useContext(AuthContext);
+
   const history = useHistory();
   const onSubmit = (formData: FormData) => {
     requestBackendLogin(formData)
       .then((response) => {
+        setAuthContextData({
+          authenticated: true,
+          tokenData: getTokenData(),
+        });
         setHasError(false);
         saveAuthData(response.data);
-        console.log('SUCESSO', response.data);
-        history.push('/admin')
+        history.push('/admin');
       })
       .catch((error) => {
         setHasError(true);
-        console.log('ERROR ', error);
       });
   };
 
@@ -54,7 +64,9 @@ const Login = () => {
               },
             })}
             type="text"
-            className={`form-control base-input ${errors.username ?'is-invalid':''}`}
+            className={`form-control base-input ${
+              errors.username ? 'is-invalid' : ''
+            }`}
             placeholder="Email"
             name="username"
           />
@@ -68,7 +80,9 @@ const Login = () => {
               required: 'Campo obrigatório',
             })}
             type="password"
-            className={`form-control base-input ${errors.password ?'is-invalid':''}`}
+            className={`form-control base-input ${
+              errors.password ? 'is-invalid' : ''
+            }`}
             placeholder="Password"
             name="password"
           />
