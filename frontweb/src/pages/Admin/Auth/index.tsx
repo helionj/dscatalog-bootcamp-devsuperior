@@ -3,6 +3,7 @@ import { ReactComponent as AuthImage } from '../../../assets/images/auth-image.s
 import Login from './Login';
 import './styles.css';
 
+
 const Auth = () => {
   return (
     <div className="auth-container">
