@@ -13,4 +13,7 @@
         flex-direction: row;
         flex: 1;
     }
+    .admin-content{
+      width: 100%;
+    }
 }
