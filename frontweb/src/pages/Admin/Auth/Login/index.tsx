@@ -12,7 +12,7 @@ import { useContext } from 'react';
 import { saveAuthData } from '../../../../util/storage';
 import { getTokenData } from '../../../../util/auth';
 
-type FormData = {
+type CredentialsDTO = {
   username: string;
   password: string;
 };
@@ -28,15 +28,15 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<CredentialsDTO>();
 
   const [hasError, setHasError] = useState(false);
 
   const { setAuthContextData } = useContext(AuthContext);
 
   const history = useHistory();
-  const onSubmit = (formData: FormData) => {
-    requestBackendLogin(formData)
+  const onSubmit = (credentialsDTO: CredentialsDTO) => {
+    requestBackendLogin(credentialsDTO)
       .then((response) => {
         setAuthContextData({
           authenticated: true,
