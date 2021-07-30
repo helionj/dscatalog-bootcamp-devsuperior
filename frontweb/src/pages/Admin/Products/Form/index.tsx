@@ -1,7 +1,10 @@
 import { AxiosRequestConfig } from 'axios';
+import { useState } from 'react';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
+import Select from 'react-select';
+import { Category } from '../../../../types/category';
 import { Product } from '../../../../types/product';
 import { requestBackend } from '../../../../util/requests';
 import './styles.css';
@@ -10,6 +13,8 @@ type UrlParams = {
   productId: string;
 };
 const Form = () => {
+  const [selectCategories, setSelectCategories] = useState<Category[]>([]);
+
   const { productId } = useParams<UrlParams>();
   const isEditing = productId !== 'create';
 
@@ -21,6 +26,12 @@ const Form = () => {
     setValue,
     formState: { errors },
   } = useForm<Product>();
+
+  useEffect(() => {
+    requestBackend({url: '/categories'}).then((response) => {
+        setSelectCategories(response.data.content);
+    })
+  }, []);
 
   useEffect(() => {
     if (isEditing) {
@@ -44,8 +55,8 @@ const Form = () => {
       categories: isEditing ? formData.categories : [{ id: 1, name: '' }],
     };
     const config: AxiosRequestConfig = {
-      method: isEditing ? 'PUT': 'POST',
-      url: isEditing ? `/products/${productId}`:'/products',
+      method: isEditing ? 'PUT' : 'POST',
+      url: isEditing ? `/products/${productId}` : '/products',
       data,
       withCredentials: true,
     };
@@ -79,6 +90,17 @@ const Form = () => {
                   {errors.name?.message}
                 </div>
               </div>
+
+              <div className="margin-bottom-30">
+                <Select
+                  options={selectCategories}
+                  getOptionLabel={(category: Category) =>category.name}
+                  getOptionValue={(category:Category) => String(category.id)}
+                  isMulti
+                  classNamePrefix="product-crud-select"
+                />
+              </div>
+
               <div className="margin-bottom-30">
                 <input
                   {...register('price', {
