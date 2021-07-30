@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { Category } from '../../../../types/category';
@@ -24,13 +24,14 @@ const Form = () => {
     register,
     handleSubmit,
     setValue,
+    control,
     formState: { errors },
   } = useForm<Product>();
 
   useEffect(() => {
-    requestBackend({url: '/categories'}).then((response) => {
-        setSelectCategories(response.data.content);
-    })
+    requestBackend({ url: '/categories' }).then((response) => {
+      setSelectCategories(response.data.content);
+    });
   }, []);
 
   useEffect(() => {
@@ -92,13 +93,28 @@ const Form = () => {
               </div>
 
               <div className="margin-bottom-30">
-                <Select
-                  options={selectCategories}
-                  getOptionLabel={(category: Category) =>category.name}
-                  getOptionValue={(category:Category) => String(category.id)}
-                  isMulti
-                  classNamePrefix="product-crud-select"
+                <Controller
+                  name="categories"
+                  rules={{ required: true }}
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      options={selectCategories}
+                      getOptionLabel={(category: Category) => category.name}
+                      getOptionValue={(category: Category) =>
+                        String(category.id)
+                      }
+                      isMulti
+                      classNamePrefix="product-crud-select"
+                    />
+                  )}
                 />
+                {errors.categories && (
+                  <div className="invalid-feedback d-block">
+                    Campo obrigatório
+                  </div>
+                )}
               </div>
 
               <div className="margin-bottom-30">
