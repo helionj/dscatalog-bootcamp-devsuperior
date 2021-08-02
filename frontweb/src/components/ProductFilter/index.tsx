@@ -7,15 +7,11 @@ import { useEffect, useState } from 'react';
 import { requestBackend } from '../../util/requests';
 type ProductFilterData = {
   name: string;
-  category: Category;
+  category: Category | null;
 };
 const ProductFilter = () => {
   const [selectCategories, setSelectCategories] = useState<Category[]>([]);
-  const {
-    register,
-    handleSubmit,
-    control,
-  } = useForm<ProductFilterData>();
+  const { register, handleSubmit, control, setValue, getValues } = useForm<ProductFilterData>();
 
   useEffect(() => {
     requestBackend({ url: '/categories' }).then((response) => {
@@ -23,6 +19,19 @@ const ProductFilter = () => {
     });
   }, []);
 
+  const handleFormClear = () => {
+    setValue("name", "");
+    setValue("category", null);
+  }
+  const handleChangeCategory =(value: Category) => {
+    setValue('category', value);
+    
+    const obj: ProductFilterData ={
+        name: getValues('name'),
+        category: getValues('category')
+    };
+    console.log(obj);
+  }
   const onSubmit = (formData: ProductFilterData) => {
     console.log(formData);
   };
@@ -53,13 +62,19 @@ const ProductFilter = () => {
                   getOptionLabel={(category: Category) => category.name}
                   getOptionValue={(category: Category) => String(category.id)}
                   classNamePrefix="product-filter-select"
+                  onChange={value => handleChangeCategory(value as Category)}
                   placeholder="Categoria"
                   isClearable
                 />
               )}
             />
           </div>
-          <button className="btn btn-outline-secondary btn-product-clear-filter">LIMPAR <span className="btn-product-filter-word">FILTRO</span></button>
+          <button
+            onClick={handleFormClear}
+            className="btn btn-outline-secondary btn-product-clear-filter"
+          >
+            LIMPAR <span className="btn-product-filter-word">FILTRO</span>
+          </button>
         </div>
       </form>
     </div>
