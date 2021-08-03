@@ -5,9 +5,11 @@ import CurrencyInput from 'react-currency-input-field';
 import { useForm, Controller } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import Select from 'react-select';
+import { toast } from 'react-toastify';
 import { Category } from '../../../../types/category';
 import { Product } from '../../../../types/product';
 import { requestBackend } from '../../../../util/requests';
+
 import './styles.css';
 
 type UrlParams = {
@@ -57,7 +59,11 @@ const Form = () => {
       withCredentials: true,
     };
     requestBackend(config).then(() => {
+      toast.info("Produto cadastrado com sucesso");
       history.push('/admin/products');
+    })
+    .catch(()=> {
+      toast.error("Erro ao cadastrar o produto");
     });
   };
   const handleCancel = () => {

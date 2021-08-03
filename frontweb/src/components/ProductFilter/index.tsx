@@ -5,11 +5,16 @@ import { Controller, useForm } from 'react-hook-form';
 import Select from 'react-select';
 import { useEffect, useState } from 'react';
 import { requestBackend } from '../../util/requests';
-type ProductFilterData = {
+export type ProductFilterData = {
   name: string;
   category: Category | null;
 };
-const ProductFilter = () => {
+
+type Props = {
+    onSubmitFilter : (data:ProductFilterData) => void
+};
+
+const ProductFilter = ({onSubmitFilter}:Props) => {
   const [selectCategories, setSelectCategories] = useState<Category[]>([]);
   const { register, handleSubmit, control, setValue, getValues } = useForm<ProductFilterData>();
 
@@ -30,10 +35,10 @@ const ProductFilter = () => {
         name: getValues('name'),
         category: getValues('category')
     };
-    console.log(obj);
+    onSubmitFilter(obj);
   }
   const onSubmit = (formData: ProductFilterData) => {
-    console.log(formData);
+    onSubmitFilter(formData);
   };
   return (
     <div className="base-card product-filter-container">
