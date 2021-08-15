@@ -4,7 +4,7 @@ import './App.css';
 import Routes from './Routes';
 import { useState } from 'react';
 import { AuthContext, AuthContextData } from './AuthContext';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 
 function App() {
   const [authContextData, setAuthContextData] = useState<AuthContextData>({
