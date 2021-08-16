@@ -7,7 +7,6 @@ test('ProductPrice should render ProductPrice', () => {
     const text = "1.351,00"
     render(<ProductPrice price={price}/>);
   
-    screen.debug();
 
     expect(screen.getByText(text)).toBeInTheDocument();
 

@@ -23,7 +23,6 @@ test('ProductCard should render ProductCard', () => {
 
   render(<ProductCard product={product} />);
 
-  screen.debug();
 
   expect(screen.getByText(product.name)).toBeInTheDocument();
   expect(screen.getByText("R$")).toBeInTheDocument();
