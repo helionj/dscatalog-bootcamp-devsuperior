@@ -87,6 +87,7 @@ const Form = () => {
                   }`}
                   placeholder="Nome do produto"
                   name="name"
+                  data-testid = "name"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.name?.message}
@@ -94,6 +95,7 @@ const Form = () => {
               </div>
 
               <div className="margin-bottom-30">
+                <label htmlFor="categories" className="d-none">Categorias</label>
                 <Controller
                   name="categories"
                   rules={{ required: true }}
@@ -108,6 +110,7 @@ const Form = () => {
                       }
                       isMulti
                       classNamePrefix="product-crud-select"
+                      inputId="categories"
                     />
                   )}
                 />
@@ -132,6 +135,7 @@ const Form = () => {
                       disableGroupSeparators={true}
                       value={field.value}
                       onValueChange={field.onChange}
+                      data-testid="price"
                     />
                   )}
                 />
@@ -155,6 +159,7 @@ const Form = () => {
                   }`}
                   placeholder="URL da imagem"
                   name="imgUrl"
+                  data-testid="imgUrl"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.imgUrl?.message}
@@ -173,6 +178,7 @@ const Form = () => {
                     errors.description ? 'is-invalid' : ''
                   }`}
                   placeholder="Descrição"
+                  data-testid ="description"
                 />
                 <div className="invalid-feedback d-block">
                   {errors.description?.message}
