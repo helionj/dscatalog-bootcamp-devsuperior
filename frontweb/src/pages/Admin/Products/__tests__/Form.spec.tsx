@@ -130,7 +130,7 @@ describe('Product update tests', () => {
   });
 
   test('should render Form', async () => {
-    const text = 'Fazer login';
+  
 
     render(
       <Router history={history}>
